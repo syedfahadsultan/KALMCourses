@@ -34,7 +34,7 @@ public class QueryProcessing {
 	public static void ExtractImplicitVar()
 	{
 		try (BufferedReader br = 
-				new BufferedReader(new FileReader("scripts/prolog/ape/tmp/implicit_var.txt"))) 
+				new BufferedReader(new FileReader("scripts/prolog/ape/temp/implicit_var.txt"))) 
 		{
 			String line = br.readLine();
 			while(line != null)

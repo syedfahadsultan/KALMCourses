@@ -1,5 +1,5 @@
 package main.java.edu.stonybrook.cs.batch;
-
+import java.util.Arrays;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -20,7 +20,7 @@ public class Batch {
 
 	private String getParsingError() {
 		String result = null;
-		try (BufferedReader br = new BufferedReader(new FileReader("scripts/prolog/ape/tmp/serialized_drs_fact.txt"))) {
+		try (BufferedReader br = new BufferedReader(new FileReader("scripts/prolog/ape/temp/serialized_drs_fact.txt"))) {
 			String line = br.readLine();
 			if (line != null) {
 				result = line;
@@ -124,7 +124,8 @@ public class Batch {
 	}
 	
 	private void batchProcessing() {
-		try (BufferedReader br = new BufferedReader(new FileReader("resources/batch/batch_query.txt"))) {
+		// try (BufferedReader br = new BufferedReader(new FileReader("resources/batch/batch_query.txt"))) {
+		try (BufferedReader br = new BufferedReader(new FileReader("resources/batch/combined.txt"))) {
 			int count = 0;
 			String sentence;
 			long totalElapsedTime = 0;
@@ -148,6 +149,7 @@ public class Batch {
 
 					long startTime = System.currentTimeMillis();
 					ArrayList<Frame> frameList = FrameExtractor.GetFrameExtractionResult();
+					System.out.println(Arrays.toString(frameList.toArray()));
 					long stopTime = System.currentTimeMillis();
 					long elapsedTime = stopTime - startTime;
 					totalElapsedTime += elapsedTime;
@@ -161,6 +163,9 @@ public class Batch {
 						serializeTopResultWithRankOnly(sentence, frameList, true);
 					}
 				}
+				// else{
+				// 	System.out.println(result);
+				// }
 			}
 			System.out.println("Total time (s): " + totalElapsedTime);
 		} catch (IOException x) {

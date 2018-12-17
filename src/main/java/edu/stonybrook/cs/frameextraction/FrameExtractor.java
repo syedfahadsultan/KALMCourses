@@ -16,8 +16,8 @@ import main.java.edu.stonybrook.cs.frame.LoadFrame;
 import main.java.edu.stonybrook.cs.query.QueryProcessing;
 
 public class FrameExtractor {
-	private static String FEQueryInput = "scripts/prolog/ape/tmp/query.pl";
-	private static String FEQueryOutput = "scripts/prolog/ape/tmp/query_output.txt";
+	private static String FEQueryInput = "scripts/prolog/ape/temp/query.pl";
+	private static String FEQueryOutput = "scripts/prolog/ape/temp/query_output.txt";
 	
 	public static ArrayList<Frame> GetFrameExtractionResult()
 	{

@@ -1,5 +1,6 @@
 package main.java.edu.stonybrook.cs.thread;
 
+import java.lang.Exception;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,8 +8,7 @@ import java.util.List;
 import it.uniroma1.lcl.babelnet.BabelNet;
 import it.uniroma1.lcl.babelnet.BabelSynset;
 import it.uniroma1.lcl.babelnet.BabelSynsetID;
-import it.uniroma1.lcl.babelnet.BabelSynsetIDRelation;
-import it.uniroma1.lcl.babelnet.InvalidBabelSynsetIDException;
+import it.uniroma1.lcl.babelnet.BabelSynsetRelation;
 import it.uniroma1.lcl.babelnet.data.BabelPointer;
 import main.java.edu.stonybrook.cs.fpparser.SemanticLinkAddition;
 import main.java.edu.stonybrook.cs.fpparser.SemanticLinkOverride;
@@ -94,9 +94,7 @@ public class BabelNetShareResource {
 		BabelSynset by = null;
 		try {
 			by = bn.getSynset(new BabelSynsetID(sid));
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InvalidBabelSynsetIDException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		Double score = Math.sqrt(by.getEdges().size()*1.0);
@@ -127,7 +125,7 @@ public class BabelNetShareResource {
 		BabelSynset by;
 		try {
 			by = bn.getSynset(new BabelSynsetID(s1));
-			for(BabelSynsetIDRelation edge : by.getEdges()) {
+			for(BabelSynsetRelation edge : by.getEdges()) {
 				Double weight = getAdjustedEdgeWeight(parameterKey, edge);
 				if(weight > 0)
 				{
@@ -191,9 +189,7 @@ public class BabelNetShareResource {
 					} 
 				}
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InvalidBabelSynsetIDException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}		
 		List<String> keyList = new ArrayList<String>(nodeMap.keySet());
@@ -247,7 +243,7 @@ public class BabelNetShareResource {
 		}
 	}
 	
-	private static Double getAdjustedEdgeWeight(String parameterKey, BabelSynsetIDRelation edge)
+	private static Double getAdjustedEdgeWeight(String parameterKey, BabelSynsetRelation edge)
 	{
 		Double weight = edge.getWeight();
 		String edgeType = getEdgeType(edge.getPointer());

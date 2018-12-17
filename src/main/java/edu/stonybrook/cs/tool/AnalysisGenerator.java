@@ -5,13 +5,14 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.Exception;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import it.uniroma1.lcl.babelnet.BabelNet;
 import it.uniroma1.lcl.babelnet.BabelSynset;
 import it.uniroma1.lcl.babelnet.BabelSynsetID;
-import it.uniroma1.lcl.babelnet.InvalidBabelSynsetIDException;
+// import it.uniroma1.lcl.babelnet.InvalidBabelSynsetIDException;
 import main.java.edu.stonybrook.cs.thread.BabelNetShareResource;
 import main.java.edu.stonybrook.cs.util.BabelNetConnector;
 
@@ -37,7 +38,7 @@ public class AnalysisGenerator {
 				}
 			}
 			bw.close();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -85,7 +86,7 @@ public class AnalysisGenerator {
 				}
 			}
 			bw.write("\t[END]" + "\n");
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -98,9 +99,9 @@ public class AnalysisGenerator {
 		try {
 			by = bn.getSynset(new BabelSynsetID(sid));
 			gloss = BabelNetConnector.getMainGloss(by);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InvalidBabelSynsetIDException e) {
+		// } catch (IOException e) {
+		// 	e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return gloss;

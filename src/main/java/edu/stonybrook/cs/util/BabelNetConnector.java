@@ -1,6 +1,7 @@
 package main.java.edu.stonybrook.cs.util;
 
 import java.io.IOException;
+import java.lang.Exception;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,14 +9,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
+import java.util.Optional;
 
 import it.uniroma1.lcl.babelnet.BabelNet;
 import it.uniroma1.lcl.babelnet.BabelSynset;
 import it.uniroma1.lcl.babelnet.BabelSynsetID;
-import it.uniroma1.lcl.babelnet.BabelSynsetIDRelation;
-import it.uniroma1.lcl.babelnet.InvalidBabelSynsetIDException;
+import it.uniroma1.lcl.babelnet.BabelSynsetRelation;
+// import it.uniroma1.lcl.babelnet.InvalidBabelSynsetIDException;
+import it.uniroma1.lcl.babelnet.InvalidSynsetIDException;
 import it.uniroma1.lcl.babelnet.data.BabelGloss;
-import it.uniroma1.lcl.babelnet.data.BabelPOS;
+// import it.uniroma1.lcl.babelnet.data.BabelPOS;
+import com.babelscape.util.UniversalPOS;
+import com.babelscape.util.POS;
 import it.uniroma1.lcl.babelnet.data.BabelPointer;
 import it.uniroma1.lcl.jlt.util.Language;
 
@@ -41,7 +46,7 @@ public class BabelNetConnector {
 				list.add(by1);
 				list.add(by2);
 			}
-		} catch (IOException | InvalidBabelSynsetIDException e) {
+		} catch (InvalidSynsetIDException e) {
 			e.printStackTrace();
 		}
 		return list;
@@ -51,7 +56,7 @@ public class BabelNetConnector {
 		List<BabelSynset> list = null;
 		try {
 			list = bn.getSynsets( word, Language.EN, getPOSTag(pos));
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return list;
@@ -68,9 +73,16 @@ public class BabelNetConnector {
 			}
 			else
 			{
-				mainGloss = bs.getMainGloss(Language.EN).getGloss();
+				Optional<BabelGloss> mg = bs.getMainGloss(Language.EN);
+				if(mg.isPresent()){
+					mainGloss = mg.get().getGloss();	
+				}
+				else{
+					mainGloss = "";
+				}
+				
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return mainGloss;
@@ -80,37 +92,37 @@ public class BabelNetConnector {
 		BabelSynset bs = null;
 		try {
 			bs = bn.getSynset( new BabelSynsetID(babelSynsetID));
-		} catch (IOException e) {			
-			e.printStackTrace();
-		} catch (InvalidBabelSynsetIDException e) {
+		// } catch (IOException e) {			
+		// 	e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return bs;
 	}
 	
-	private static BabelPOS getPOSTag(String pos)
+	private static POS getPOSTag(String pos)
 	{
 		if(pos.equals("n"))
 		{
-			return BabelPOS.NOUN;
+			return UniversalPOS.NOUN;
 		}
 		else if(pos.equals("a"))
 		{
-			return BabelPOS.ADJECTIVE;
+			return UniversalPOS.ADJ;
 		}
 		else if(pos.equals("v"))
 		{
-			return BabelPOS.VERB;
+			return UniversalPOS.VERB;
 		}
 		else
 		{
-			return BabelPOS.ADVERB;
+			return UniversalPOS.ADV;
 		}
 	}
 	
 	public static boolean isGivenName(BabelSynset bs)
 	{
-		for(BabelSynsetIDRelation edge : bs.getEdges(BabelPointer.ANY_HYPERNYM)) {
+		for(BabelSynsetRelation edge : bs.getEdges(BabelPointer.ANY_HYPERNYM)) {
 			String hypernym = edge.getBabelSynsetIDTarget().getID();
 			if(hypernym.equals("bn:15930029n") || hypernym.equals("bn:15930045n"))
 			{
@@ -134,7 +146,7 @@ public class BabelNetConnector {
 		BabelSynset by;
 		try {
 			by = bn.getSynset(new BabelSynsetID(s1));
-			for(BabelSynsetIDRelation edge : by.getEdges(BabelPointer.ANY_HYPERNYM)) {
+			for(BabelSynsetRelation edge : by.getEdges(BabelPointer.ANY_HYPERNYM)) {
 				String targetSID = edge.getBabelSynsetIDTarget().getID();
 				if(set.contains(targetSID))
 				{
@@ -150,9 +162,9 @@ public class BabelNetConnector {
 					}
 				}           
 	        }
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InvalidBabelSynsetIDException e) {
+		// } catch (IOException e) {
+		// 	e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		if(keyHyperList.size() > 0)
@@ -174,7 +186,7 @@ public class BabelNetConnector {
 		BabelSynset by;
 		try {
 			by = bn.getSynset(new BabelSynsetID(s1));
-			for(BabelSynsetIDRelation edge : by.getEdges(BabelPointer.ANY_HYPONYM)) {
+			for(BabelSynsetRelation edge : by.getEdges(BabelPointer.ANY_HYPONYM)) {
 				String targetSID = edge.getBabelSynsetIDTarget().getID();
 				if(set.contains(targetSID))
 				{
@@ -190,9 +202,9 @@ public class BabelNetConnector {
 					}
 				}           
 	        }
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InvalidBabelSynsetIDException e) {
+		// } catch (IOException e) {
+		// 	e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		if(keyHypoList.size() > 0)
@@ -210,9 +222,9 @@ public class BabelNetConnector {
 		BabelSynset by = null;
 		try {
 			by = bn.getSynset(new BabelSynsetID(s1));
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InvalidBabelSynsetIDException e) {
+		// } catch (IOException e) {
+		// 	e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return by.isKeyConcept();
@@ -297,13 +309,13 @@ public class BabelNetConnector {
 			BabelSynset by = null;
 			try {
 				by = bn.getSynset(new BabelSynsetID(temp));
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (InvalidBabelSynsetIDException e) {
+			// } catch (IOException e) {
+			// 	e.printStackTrace();
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			assert by != null;
-			for(BabelSynsetIDRelation edge : by.getEdges()) {
+			for(BabelSynsetRelation edge : by.getEdges()) {
 				String targetSID = edge.getBabelSynsetIDTarget().getID();
 				if(set.contains(targetSID))
 				{
@@ -357,13 +369,13 @@ public class BabelNetConnector {
 			BabelSynset by = null;
 			try {
 				by = bn.getSynset(new BabelSynsetID(temp));
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (InvalidBabelSynsetIDException e) {
+			// } catch (IOException e) {
+			// 	e.printStackTrace();
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			assert by != null;
-			for(BabelSynsetIDRelation edge : by.getEdges()) {
+			for(BabelSynsetRelation edge : by.getEdges()) {
 				String targetSID = edge.getBabelSynsetIDTarget().getID();
 				if(set.contains(targetSID))
 				{
@@ -488,9 +500,9 @@ public class BabelNetConnector {
 		BabelSynset by = null;
 		try {
 			by = bn.getSynset(new BabelSynsetID(sid));
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InvalidBabelSynsetIDException e) {
+		// } catch (IOException e) {
+		// 	e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return by.getEdges().size();
@@ -502,11 +514,11 @@ public class BabelNetConnector {
 		BabelSynset toSynset = null;
 		try {
 			toSynset = bn.getSynset(new BabelSynsetID(to));
-			for(BabelSynsetIDRelation edge : toSynset.getEdges())
+			for(BabelSynsetRelation edge : toSynset.getEdges())
 			{
 				String tempSID = edge.getBabelSynsetIDTarget().getID();
 				BabelSynset tempSynset = bn.getSynset(new BabelSynsetID(tempSID));
-				for(BabelSynsetIDRelation newEdge : tempSynset.getEdges())
+				for(BabelSynsetRelation newEdge : tempSynset.getEdges())
 				{
 					if(newEdge.getBabelSynsetIDTarget().getID().equals(from))
 					{
@@ -514,9 +526,9 @@ public class BabelNetConnector {
 					}
 				}
 			}
-		} catch (IOException e) {			
-			e.printStackTrace();
-		} catch (InvalidBabelSynsetIDException e) {		
+		// } catch (IOException e) {			
+		// 	e.printStackTrace();
+		} catch (Exception e) {		
 			e.printStackTrace();
 		}
 		return count;
@@ -530,7 +542,7 @@ public class BabelNetConnector {
 		int denominator = 0;
 		try {
 			fromSynset = bn.getSynset(new BabelSynsetID(from));
-			for(BabelSynsetIDRelation edge : fromSynset.getEdges())
+			for(BabelSynsetRelation edge : fromSynset.getEdges())
 			{
 				String temp = edge.getBabelSynsetIDTarget().getID();
 				if(set.contains(temp))
@@ -549,9 +561,9 @@ public class BabelNetConnector {
 				}
 			}
 			
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InvalidBabelSynsetIDException e) {
+		// } catch (IOException e) {
+		// 	e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
@@ -561,9 +573,9 @@ public class BabelNetConnector {
 				BabelSynset toSynset = bn.getSynset(new BabelSynsetID(to));
 				denominator = toSynset.getEdges().size();
 				numerator += denominator;
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (InvalidBabelSynsetIDException e) {
+			// } catch (IOException e) {
+			// 	e.printStackTrace();
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -580,7 +592,7 @@ public class BabelNetConnector {
 		int denominator = 0;
 		try {
 			fromSynset = bn.getSynset(new BabelSynsetID(from));
-			for(BabelSynsetIDRelation edge : fromSynset.getEdges())
+			for(BabelSynsetRelation edge : fromSynset.getEdges())
 			{
 				String temp = edge.getBabelSynsetIDTarget().getID();
 				if(set.contains(temp))
@@ -599,9 +611,9 @@ public class BabelNetConnector {
 				}
 			}
 			
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InvalidBabelSynsetIDException e) {
+		// } catch (IOException e) {
+		// 	e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		

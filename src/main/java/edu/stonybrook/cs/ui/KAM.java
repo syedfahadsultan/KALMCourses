@@ -51,6 +51,7 @@ import main.java.edu.stonybrook.cs.frame.FrameElement;
 import main.java.edu.stonybrook.cs.frameextraction.FrameExtractor;
 import main.java.edu.stonybrook.cs.query.QueryProcessing;
 import main.java.edu.stonybrook.cs.util.PrologConnector;
+import java.lang.ProcessBuilder;
 
 public class KAM extends Application {
 	private Text ulrResult = new Text("");
@@ -113,6 +114,7 @@ public class KAM extends Application {
 			
 			if(sentence.length() != 0)
 			{
+
 				QueryProcessing.ClearVarWordIndexSet();
 				if(QueryProcessing.IsQuery(sentence))
 				{
@@ -124,6 +126,7 @@ public class KAM extends Application {
 				{
 					QueryProcessing.ExtractImplicitVar();
 				}
+
 				String result = getParsingError();
 				if(result != null)
 				{
@@ -136,7 +139,9 @@ public class KAM extends Application {
 					{
 						sentenceData.add(s);
 					}
-					sentenceTable.refresh();
+					// sentenceTable.refresh();
+					sentenceTable.getColumns().get(0).setVisible(false);
+ 					sentenceTable.getColumns().get(0).setVisible(true);
 				}
 			}
 			else
@@ -257,7 +262,9 @@ public class KAM extends Application {
 															System.out.println(tempFrame.getFrameScoreStr());
 															affinityScore.setText(String.format("%.3f",tempScore));
 															System.out.println("Value is: " + newSynsetID);
-															table.refresh();
+															// table.refresh();
+															table.getColumns().get(0).setVisible(false);
+ 															table.getColumns().get(0).setVisible(true);
 															String babelSynsetGloss = item.getFEValBabelSynsetGloss(newSynsetID);
 															Tooltip tooltip = new Tooltip(babelSynsetGloss);
 															setTooltip(tooltip);
@@ -314,7 +321,7 @@ public class KAM extends Application {
 	{
 		String result = null;
 		try (BufferedReader br = 
-				new BufferedReader(new FileReader("scripts/prolog/ape/tmp/serialized_drs_fact.txt"))) 
+				new BufferedReader(new FileReader("scripts/prolog/ape/temp/serialized_drs_fact.txt"))) 
 		{
 			String line = br.readLine();
 			if(line != null)
@@ -333,6 +340,7 @@ public class KAM extends Application {
 				new BufferedWriter(new FileWriter("scripts/prolog/ape/query/qparse.pl"))) 
 		{
 			String newSentence = sentence.replace("'", "\\'");
+			System.out.println("Fahad 1 : " + newSentence);
 			bw.write("?-parse_and_serialize('" + newSentence + "').");
 		} catch (IOException e) {
 			e.printStackTrace();
