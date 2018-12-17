@@ -1,11 +1,12 @@
 parse_and_serialize(Sentence) :-
+    assert(library_directory('/Users/fahad/NewWorkspace/kalm/scripts/prolog/ape/')),
     acetext_to_drs(Sentence,_,_,drs(Refs,DRSFacts),_,_),
     Refs \= [],
     DRSFacts \= [],
     !,
-    open('tmp/serialized_drs_fact.txt',write,Stream),
+    open('/Users/fahad/NewWorkspace/kalm/scripts/prolog/ape/temp/serialized_drs_fact.txt',write,Stream),
     close(Stream),
-    open('tmp/implicit_var.txt',write,Stream2),
+    open('/Users/fahad/NewWorkspace/kalm/scripts/prolog/ape/temp/implicit_var.txt',write,Stream2),
     query_rewrite(Stream2,DRSFacts,DRSFacts2),
     close(Stream2),
     num_vars:numbervars(drs(Refs,DRSFacts2)),
@@ -17,28 +18,28 @@ parse_and_serialize(Sentence) :-
 parse_and_serialize(Sentence) :-
     acetext_to_drs(Sentence,_,_,_,M,_),
     !,
-    open('tmp/serialized_drs_fact.pl',write,Stream0),
+    open('/Users/fahad/NewWorkspace/kalm/scripts/prolog/ape/temp/serialized_drs_fact.pl',write,Stream0),
     write(Stream0,'serialized_drs_fact(na,na).\n'),
     close(Stream0),
-    open('tmp/serialized_drs_fact.txt',write,Stream),
+    open('/Users/fahad/NewWorkspace/kalm/scripts/prolog/ape/temp/serialized_drs_fact.txt',write,Stream),
     fmt_write(Stream,"%S",args(M)),
     close(Stream),
-    open('tmp/implicit_var.txt',write,Stream2),
+    open('/Users/fahad/NewWorkspace/kalm/scripts/prolog/ape/temp/implicit_var.txt',write,Stream2),
     close(Stream2).
 
 parse_and_serialize(Sentence) :-
     \+ acetext_to_drs(Sentence,_,_,_,_,_),
-    open('tmp/serialized_drs_fact.pl',write,Stream0),
+    open('/Users/fahad/NewWorkspace/kalm/scripts/prolog/ape/temp/serialized_drs_fact.pl',write,Stream0),
     write(Stream0,'serialized_drs_fact(na,na).\n'),
     close(Stream0),
-    open('tmp/serialized_drs_fact.txt',write,Stream),
+    open('/Users/fahad/NewWorkspace/kalm/scripts/prolog/ape/temp/serialized_drs_fact.txt',write,Stream),
     write(Stream,'Sentence not accepted by the parser.'),
     close(Stream),
-    open('tmp/implicit_var.txt',write,Stream2),
+    open('/Users/fahad/NewWorkspace/kalm/scripts/prolog/ape/temp/implicit_var.txt',write,Stream2),
     close(Stream2).
 
 serialize_drs(DRSFacts) :-
-    open('tmp/serialized_drs_fact.pl',write,Stream),
+    open('/Users/fahad/NewWorkspace/kalm/scripts/prolog/ape/temp/serialized_drs_fact.pl',write,Stream),
     serialize_drs_facts(Stream,DRSFacts),
     close(Stream).
 
@@ -157,7 +158,7 @@ rewrite_what_query(OldDRSFacts,[Predicate-SentenceID/WordID|Rest],
     %NewPredicate2 = object(Y,what,countable,na,eq,1),
     %string:concat_atom([WordID,y],WordID1),
     %string:concat_atom([WordID,yy],WordID2),
-    open('tmp/implicit_var.txt',append,Stream),
+    open('/Users/fahad/NewWorkspace/kalm/scripts/prolog/ape/temp/implicit_var.txt',append,Stream),
     fmt_write(Stream,"w%S.%S\n",args(SentenceID,WordID)),
     %fmt_write(Stream,"w%S.%S\n",args(SentenceID,WordID2)),
     close(Stream),
@@ -169,7 +170,7 @@ rewrite_what_query(OldDRSFacts,[Predicate-SentenceID/WordID|Rest],
     Predicate = object(X,_,_,_,_,_),
     basics:member(query(X,howm)-SentenceID/_,OldDRSFacts),
     !,
-    open('tmp/implicit_var.txt',append,Stream),
+    open('/Users/fahad/NewWorkspace/kalm/scripts/prolog/ape/temp/implicit_var.txt',append,Stream),
     fmt_write(Stream,"qw%S.%S\n",args(SentenceID,WordID)),
     close(Stream),
     rewrite_what_query(OldDRSFacts,Rest,NewRest).

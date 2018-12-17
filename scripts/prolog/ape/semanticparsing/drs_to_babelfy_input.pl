@@ -1,5 +1,5 @@
 drs_to_babelfy_input(DRSFacts) :-
-    open('tmp/babelfy_input.txt',write,Stream),
+    open('/Users/fahad/NewWorkspace/kalm/scripts/prolog/ape/temp/babelfy_input.txt',write,Stream),
     drs_facts_to_keyval_pair(DRSFacts,NewDRSFacts),
     keysort(NewDRSFacts,NewDRSFacts2),
     predicate_to_babelfy_text(Stream,NewDRSFacts2),

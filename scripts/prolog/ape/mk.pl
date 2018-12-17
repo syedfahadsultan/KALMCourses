@@ -42,5 +42,5 @@
 :- ensure_loaded('semanticparsing/parse_and_serialize.pl').
 :- ensure_loaded('semanticparsing/extract_frame_and_serialize.pl').
 :- ensure_loaded('query/qparse.pl').
-:- ensure_loaded('tmp/serialized_drs_fact.pl').
+:- ensure_loaded('temp/serialized_drs_fact.pl').
 :- ensure_loaded('query/qframe_extraction.pl').

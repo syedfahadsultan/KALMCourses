@@ -1,3 +1,0 @@
-Human_gender
-Person=Mary=w1.1=ne
-Gender=female=w1.4=n

@@ -20,6 +20,7 @@
 %		aceparagraph_to_drs/10  % +Text, +Guess, +Catch, +StartID, -Sentences, -SyntaxTrees, -UnresolvedDrs, -Drs, -Messages, -Time
 %	]).
 
+%% FAHAD
 :- import append/3, length/2, member/2, ith/3 from basics.
 	
 /** <module> ACE to DRS
@@ -57,15 +58,15 @@
 %		drs_reverse/2
 %	]).
 
-%:- use_module(ape_utils, [
-%		cpu_time/2,
-%		handle_unknown_words/4,
-%		new_npid/1,
-%		b_setval/2,
-%		list_close/2,
-%		list_of_conds_and_anaphors/3,
-%		report_failed_sentence/2
-%	]).
+%% :- use_module(ape_utils, [
+%% 		cpu_time/2,
+%% 		handle_unknown_words/4,
+%% 		new_npid/1,
+%% 		b_setval/2,
+%% 		list_close/2,
+%% 		list_of_conds_and_anaphors/3,
+%% 		report_failed_sentence/2
+%% 	]).
 
 %:- use_module(tokenizer).
 
@@ -111,6 +112,7 @@ acetext_to_drs(Text, Sentences, SyntaxTrees, Drs, Messages,CorefList) :-
 
 acetext_to_drs(Text, Guess, Catch, Sentences, SyntaxTrees, Drs, Messages, [TimeT, TimeP, TimeR],CorefList) :-
 	cpu_time(tokenize(Text, Tokens), T),
+	%% cputime(tokenize(Text, Tokens), T),
 	tokens_to_paragraphs(Tokens, Paragraphs),
 	paragraphs_to_drs(Paragraphs, Guess, Catch, 1, Sentences, SyntaxTrees, Drs, Messages, [TimeTPre, TimeP, TimeR],CorefList),
 	clear_messages,
@@ -276,6 +278,7 @@ reconstruct_object([object(V,Lexem,named,V3,V4,V5)-Index|Rest],
     !,
     reconstruct_object(Rest,Rest2).
 
+%Fahad
 reconstruct_object([drs(R1,C1) => drs(R2,C2)|Rest],
     [drs(R1,NC1) => drs(R2,NC2)|Rest2]) :-
     reconstruct_object(C1,NC1),

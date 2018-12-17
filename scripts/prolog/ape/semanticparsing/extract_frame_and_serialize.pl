@@ -2,7 +2,7 @@
 :- import numbervars/1 from num_vars.
 
 extract_frame_and_serialize(SentenceID) :-
-    open('tmp/query_output.txt',write,Stream),
+    open('/Users/fahad/NewWorkspace/kalm/scripts/prolog/ape/temp/query_output.txt',write,Stream),
     close(Stream),
     findall(Predicate-SentenceID/WordID,serialized_drs_fact(Predicate,SentenceID/WordID),DRSFacts),
     numbervars(DRSFacts),
@@ -28,7 +28,7 @@ extract_frame_word_by_word(_,[],[]).
 framelist_to_text([],_).
 
 framelist_to_text([Frame|Rest],DRSFacts) :-
-    open('tmp/query_output.txt',append,Stream),
+    open('/Users/fahad/NewWorkspace/kalm/scripts/prolog/ape/temp/query_output.txt',append,Stream),
     framelist_to_text_helper(Stream,[Frame|Rest],DRSFacts),
     close(Stream).
 
@@ -41,7 +41,7 @@ framelist_to_text_helper(Stream,[frame_tuple(FrameName,FEList)|Rest],DRSFacts) :
 framelist_to_text_helper(_,[],_).
 
 clear_query_output :- 
-    open('tmp/query_output.txt',write,Stream),
+    open('/Users/fahad/NewWorkspace/kalm/scripts/prolog/ape/temp/query_output.txt',write,Stream),
     close(Stream).
 
 felist_to_text(Stream,[pair(FEName,FE,Index,PredicateName)|Rest],DRSFacts) :-

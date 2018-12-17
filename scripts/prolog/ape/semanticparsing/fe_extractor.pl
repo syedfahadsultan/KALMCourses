@@ -39,8 +39,8 @@ fe_extractor_from_drs_facts(DRSFacts,TargetIndex,FrameTuple) :-
     get_predicate_from_word_index(DRSFacts, TargetIndex, TargetPredicate-_),
     TargetPredicate =.. [Type,_,Lexem|_],
     lvp(Lexem,Type,FrameName,FE_Logical_Syntactic_Pattern_List),
-    extract_fe_list_from_lvp(DRSFacts,TargetIndex,FE_Logical_Syntactic_Pattern_List,
-    FEList),
+    write(FE_Logical_Syntactic_Pattern_List),
+    extract_fe_list_from_lvp(DRSFacts,TargetIndex,FE_Logical_Syntactic_Pattern_List,FEList),
     FrameTuple = frame_tuple(FrameName,FEList),
     length(FEList,Len),
     Len > 1.
@@ -63,8 +63,23 @@ fe_extractor(Sentence,_,_) :-
     acetext_to_drs(Sentence,_,_,_,M,_),
     write(M).
 
-extract_fe_list_from_lvp(DRSFacts,TargetIndex,[pair(FEName,Logical_Syntactic_Pattern,
-    Flag)|Rest],FEList) :-
+%% extract_fe_list_from_lvp(DRSFacts,TargetIndex,[pair(FEName,Logical_Syntactic_Pattern,
+%%     Flag)|Rest],FEList) :-
+%%     write('Fahad-----> '),
+%%     extract_fe_from_logical_syntactic_pattern(
+%%     DRSFacts,TargetIndex,Logical_Syntactic_Pattern,FE,FEIndex,PredicateName),
+%%     is_valid_fe_val(FEName,FE),
+%%     L1 = [pair(FEName,FE,FEIndex,PredicateName)],
+%%     extract_fe_list_from_lvp(DRSFacts,TargetIndex,Rest,RestFEList),
+%%     \+ basics:memberchk(pair(_,_,FEIndex,_),RestFEList),
+%%     append(L1,RestFEList,FEList).    
+
+%% extract_fe_list_from_lvp(DRSFacts,TargetIndex,[pair(FEName,Logical_Syntactic_Pattern,optional)|Rest],FEList) :-
+%%     write('Sultan-----> '),
+%%     extract_fe_list_from_lvp(DRSFacts,TargetIndex,Rest,FEList).
+
+extract_fe_list_from_lvp(DRSFacts,TargetIndex,[pair(FEName,Logical_Syntactic_Pattern)|Rest],FEList) :-
+    write('Fahad-----> '),
     extract_fe_from_logical_syntactic_pattern(
     DRSFacts,TargetIndex,Logical_Syntactic_Pattern,FE,FEIndex,PredicateName),
     is_valid_fe_val(FEName,FE),
@@ -73,11 +88,12 @@ extract_fe_list_from_lvp(DRSFacts,TargetIndex,[pair(FEName,Logical_Syntactic_Pat
     \+ basics:memberchk(pair(_,_,FEIndex,_),RestFEList),
     append(L1,RestFEList,FEList).    
 
-extract_fe_list_from_lvp(DRSFacts,TargetIndex,[pair(FEName,Logical_Syntactic_Pattern,
-    optional)|Rest],FEList) :-
+extract_fe_list_from_lvp(DRSFacts,TargetIndex,[pair(FEName,Logical_Syntactic_Pattern)|Rest],FEList) :-
+    write('Sultan-----> '),
     extract_fe_list_from_lvp(DRSFacts,TargetIndex,Rest,FEList).
 
-extract_fe_list_from_lvp(_,_,[],[]).
+extract_fe_list_from_lvp(_,_,[],[]):-
+    write('Syed----->').
 
 extract_fe_from_logical_syntactic_pattern(DRSFacts,TargetIndex,Logical_Syntactic_Pattern,
     FE,FEIndex,PredicateNameResult) :-
